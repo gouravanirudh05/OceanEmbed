@@ -1,0 +1,24 @@
+# Full North Indian Ocean run, sized for CPU-only training.
+# Rationale for the reductions relative to configs/default.yaml: on a 12-thread
+# CPU the 1.6M-parameter default needs ~7 h for 25 epochs.  A 0.84M-parameter
+# model at 6 windows/day reaches the same validation RMSE plateau in ~1.5 h,
+# because each epoch resamples fresh windows and the model sees ~61k distinct
+# 8deg x 8deg windows over the run.
+run_name: nio_full
+data:
+  patches_per_day: 6
+model:
+  encoder: cnn_vit
+  embed_dim: 96
+  stem_width: 48
+  depth_blocks: 3
+  n_heads: 4
+  profile_head: monotone
+train:
+  epochs: 14
+  batch_size: 32
+  lr: 0.0004
+  num_workers: 3
+  threads: 8
+  log_every: 40
+  early_stop_patience: 5

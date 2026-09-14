@@ -1,0 +1,17 @@
+# Fast smoke-test configuration: 1 year of data, few epochs.
+# Use for CI and for verifying the pipeline end-to-end in a couple of minutes.
+run_name: oceanembed_quick
+data:
+  start: "2021-01-01"
+  end: "2021-12-31"
+  train_end: "2021-08-31"
+  val_end: "2021-10-31"
+  patches_per_day: 6
+model:
+  embed_dim: 64
+  stem_width: 32
+  depth_blocks: 2
+train:
+  epochs: 3
+  batch_size: 16
+  num_workers: 2

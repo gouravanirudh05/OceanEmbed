@@ -1,0 +1,78 @@
+# OceanEmbed - default configuration
+# INCOIS SIH-2026 PS#01: subsurface temperature reconstruction from surface satellite observations
+run_name: oceanembed_v1
+
+paths:
+  raw: data/raw
+  interim: data/interim
+  processed: data/processed
+  cache: data/cache
+  checkpoints: outputs/checkpoints
+  figures: outputs/figures
+  predictions: outputs/predictions
+  reports: outputs/reports
+
+domain:            # North Indian Ocean, as mandated by the problem statement
+  lat_min: 5.0
+  lat_max: 30.0
+  lon_min: 45.0
+  lon_max: 105.0
+  resolution: 0.25
+
+data:
+  source: synthetic        # synthetic (OSSE twin) | cmems (real products)
+  start: "2021-01-01"
+  end: "2023-12-31"
+  train_end: "2022-12-31"  # 2 years train
+  val_end: "2023-06-30"    # 6 months validation, 6 months held-out test
+  seed: 20260914
+  obs_noise: true
+  cloud_gaps: true
+  gap_fraction: 0.12
+  patch: 32                # 32 px @ 0.25deg = 8deg x 8deg
+  patches_per_day: 12
+  min_sea_fraction: 0.55
+  argo_profiles_per_day: 28
+
+model:
+  encoder: cnn_vit         # cnn | cnn_vit | unet | autoencoder
+  embed_dim: 128
+  stem_width: 64
+  depth_blocks: 4
+  n_heads: 4
+  patch_size: 4
+  dropout: 0.1
+  decoder_hidden: 256
+  decoder_layers: 3
+  max_inversion: 1.5
+  predict_uncertainty: true
+  use_static: true
+  profile_head: monotone   # monotone (physics-constrained) | free
+
+train:
+  epochs: 30
+  batch_size: 32
+  lr: 0.0003
+  weight_decay: 0.0001
+  warmup_frac: 0.05
+  grad_clip: 1.0
+  amp: false
+  num_workers: 4
+  device: auto
+  threads: 0               # 0 = let torch decide
+  log_every: 25
+  early_stop_patience: 8
+  w_profile: 1.0
+  w_strat: 0.05
+  w_grad: 0.15
+  w_recon: 0.10
+  w_aux: 0.20
+  w_nll: 0.05
+  huber_delta: 1.0
+  seed: 1337
+
+eval:
+  baselines: [climatology, linear, sla_regression, mlp]
+  metrics_depths: []
+  regions: [full, bay_of_bengal, arabian_sea]
+  bootstrap: 200

@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "oceanembed"
+version = "0.1.0"
+description = "Satellite-embedding deep learning framework for reconstructing subsurface ocean temperature from surface satellite observations (North Indian Ocean)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "numpy>=1.24,<2", "scipy>=1.10", "pandas>=2.0", "pyyaml>=6.0", "tqdm>=4.65",
+    "torch>=2.2", "xarray>=2023.1", "netCDF4>=1.6", "pyshp>=2.3",
+    "scikit-learn>=1.3", "matplotlib>=3.7", "plotly>=5.15", "streamlit>=1.30",
+]
+
+[project.optional-dependencies]
+real = ["copernicusmarine>=1.3", "earthaccess>=0.9"]
+dev = ["pytest>=7.4"]
+
+[project.scripts]
+oceanembed = "oceanembed.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["oceanembed*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]

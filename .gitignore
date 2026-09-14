@@ -216,3 +216,21 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- OceanEmbed generated artefacts --------------------------------------
+# Datasets and model outputs are reproducible from the code and configs, and
+# run to several GB. Regenerate with `make data` / `make train`.
+data/raw/
+data/interim*/
+data/processed*/
+data/cache/*.npy
+outputs/checkpoints/
+outputs/predictions/
+outputs/figures*/
+outputs/reports/*.log
+*.nc
+*.npy
+*.npz
+
+# Keep the Natural Earth coastline (small, and fetching it needs network)
+!data/cache/ne_50m_land/
